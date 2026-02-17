@@ -23,4 +23,6 @@ final class ArticlesController extends AbstractController
         'articles' => $articles,
     ]);
     }
+    
+
 }
