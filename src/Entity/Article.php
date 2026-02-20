@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
@@ -14,21 +15,81 @@ class Article
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $y = null;
+    private ?string $titre = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $contenu = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $auteur = null;
+
+    #[ORM\Column]
+    private ?\DateTime $dateCreation = null;
+
+    #[ORM\Column]
+    private ?bool $publie = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getY(): ?string
+    public function getTitre(): ?string
     {
-        return $this->y;
+        return $this->titre;
     }
 
-    public function setY(string $y): static
+    public function setTitre(string $titre): static
     {
-        $this->y = $y;
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getContenu(): ?string
+    {
+        return $this->contenu;
+    }
+
+    public function setContenu(string $contenu): static
+    {
+        $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?string
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(string $auteur): static
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function getDateCreation(): ?\DateTime
+    {
+        return $this->dateCreation;
+    }
+
+    public function setDateCreation(\DateTime $dateCreation): static
+    {
+        $this->dateCreation = $dateCreation;
+
+        return $this;
+    }
+
+    public function isPublie(): ?bool
+    {
+        return $this->publie;
+    }
+
+    public function setPublie(bool $publie): static
+    {
+        $this->publie = $publie;
 
         return $this;
     }
