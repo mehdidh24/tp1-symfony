@@ -50,11 +50,18 @@ class Article
 
     #[ORM\Column]
     private ?bool $publie = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $nom = null;
     #[Assert\Regex(
     pattern: '/^[a-zA-ZÀ-ÿ\s\-]+$/',
     message: 'Le nom de l\'auteur ne peut contenir que des lettres, espaces et tirets.'
 )]
-    public function getId(): ?int
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+private ?Categorie $categorie = null;
+#[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'categorie')]
+private Collection $articles;
+public function getId(): ?int
     {
         return $this->id;
     }
@@ -115,6 +122,18 @@ class Article
     public function setPublie(bool $publie): static
     {
         $this->publie = $publie;
+
+        return $this;
+    }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): static
+    {
+        $this->nom = $nom;
 
         return $this;
     }
