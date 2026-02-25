@@ -8,6 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
+
+
+
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
 {
@@ -16,6 +19,10 @@ class Article
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Regex(
+    pattern: '/^[a-zA-ZÀ-ÿ\s\-]+$/',
+    message: 'Le nom de l\'auteur ne peut contenir que des lettres, espaces et tirets.'
+     )]
     #[ORM\Column(length: 255)]
      #[Assert\NotBlank(message: 'Le titre ne peut pas être vide.')]
     #[Assert\Length(
@@ -50,18 +57,10 @@ class Article
 
     #[ORM\Column]
     private ?bool $publie = null;
-
-    #[ORM\Column(length: 100)]
-    private ?string $nom = null;
-    #[Assert\Regex(
-    pattern: '/^[a-zA-ZÀ-ÿ\s\-]+$/',
-    message: 'Le nom de l\'auteur ne peut contenir que des lettres, espaces et tirets.'
-)]
-    #[ORM\ManyToOne(inversedBy: 'articles')]
-private ?Categorie $categorie = null;
-#[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'categorie')]
-private Collection $articles;
-public function getId(): ?int
+      #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: "articles")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Categorie $categorie = null;
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -122,19 +121,17 @@ public function getId(): ?int
     public function setPublie(bool $publie): static
     {
         $this->publie = $publie;
-
-        return $this;
+         return $this;
     }
-
-    public function getNom(): ?string
+    public function getCategorie(): ?Categorie
     {
-        return $this->nom;
+        return $this->categorie;
     }
-
-    public function setNom(string $nom): static
+    public function setCategorie(?Categorie $categorie): static
     {
-        $this->nom = $nom;
+        $this->categorie = $categorie;
 
-        return $this;
+         return $this;
     }
 }
+

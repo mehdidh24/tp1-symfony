@@ -69,6 +69,7 @@ class ArticleType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control'],
             ])
+            
         ;
     }
 
