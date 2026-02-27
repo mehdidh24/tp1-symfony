@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ categorie.nom }}{% endblock %}
+
+{% block body %}
+    <h1 class="display-4">{{ categorie.nom }}</h1>
+
+    {% if categorie.description %}
+        <p class="text-muted mb-4 pb-2 border-bottom">
+            {{ categorie.description }}
+        </p>
+    {% endif %}
+
+    <h2 class="mt-4">Articles de cette catégorie</h2>
+
+    <ul class="list-group mb-4">
+        {% for article in categorie.articles %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ article.titre }}
+                {% if article.publie %}
+                    <span class="badge bg-success">Publié</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Brouillon</span>
+                {% endif %}
+            </li>
+        {% else %}
+            <li class="list-group-item text-muted">Aucun article</li>
+        {% endfor %}
+    </ul>
+
+    <div class="d-flex gap-2">
+        <a href="{{ path('categorie_modifier', {id: categorie.id}) }}" class="btn btn-primary">
+            ✏️ Modifier
+        </a>
+
+        <form method="post"
+              action="{{ path('categorie_supprimer', {id: categorie.id}) }}"
+              onsubmit="return confirm('Supprimer cette catégorie ?');">
+            <input type="hidden" name="_token"
+                   value="{{ csrf_token('delete-categorie' ~ categorie.id) }}">
+            <button class="btn btn-danger">🗑️ Supprimer</button>
+        </form>
+
+        <a href="{{ path('categories_liste') }}" class="btn btn-outline-secondary">
+            ← Retour
+        </a>
+    </div>
+{% endblock %}
