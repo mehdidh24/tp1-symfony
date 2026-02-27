@@ -44,4 +44,40 @@ final class CategoriesController extends AbstractController
             'formulaire' => $form->createView(),
         ]);
     }
+    #[Route('/categories/{id}', name: 'app_categorie_detail', requirements: ['id' => '\d+'])]
+    public function detail(Categorie $categorie): Response
+    {
+        return $this->render('categories/detail.html.twig', [
+            'categorie' => $categorie,
+        ]);
+    }
+    #[Route('/categories/{id}/supprimer', name: 'app_categorie_supprimer', requirements: ['id' => '\d+'])]
+    public function supprimer(Categorie $categorie, EntityManagerInterface $em): RedirectResponse
+    {
+        $em->remove($categorie);
+        $em->flush();
+
+        $this->addFlash('success', 'Catégorie supprimée avec succès !');
+
+        return $this->redirectToRoute('app_categories');
+    }
+    #[Route('/categories/{id}/modifier', name: 'app_categorie_modifier', requirements: ['id' => '\d+'])]
+    public function modifier(Request $request, Categorie $categorie, EntityManagerInterface $em): Response
+    {
+        $form = $this->createForm(CategorieType::class, $categorie);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            $this->addFlash('success', 'Catégorie modifiée avec succès !');
+
+            return $this->redirectToRoute('app_categories');
+        }
+
+        return $this->render('categories/modifier.html.twig', [
+            'formulaire' => $form->createView(),
+            'categorie' => $categorie,
+        ]);
+    }
 }
