@@ -57,9 +57,14 @@ class Article
 
     #[ORM\Column]
     private ?bool $publie = null;
-      #[ORM\ManyToOne(targetEntity: Categorie::class, inversedBy: "articles")]
+      #[ORM\ManyToOne(inversedBy: "articles")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTime();
+        $this->publie = false;
+    }
     public function getId(): ?int
     {
         return $this->id;

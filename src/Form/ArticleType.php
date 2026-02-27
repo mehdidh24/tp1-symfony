@@ -22,54 +22,35 @@ class ArticleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre', TextType::class, [
-                'label' => 'Titre de l\'article',
-                'attr' => [
-                    'placeholder' => 'Saisissez le titre...',
-                    'class' => 'form-control',
-                ],
-            ])
-            ->add('contenu', TextareaType::class, [
-                'label' => 'Contenu',
-                'attr' => [
-                    'rows' => 8,
-                    'placeholder' => 'Rédigez votre article...',
-                    'class' => 'form-control',
-                ],
-            ])
-            ->add('auteur', TextType::class, [
-                'label' => 'Auteur',
-                'attr' => [
-                    'placeholder' => 'Nom de l\'auteur',
-                    'class' => 'form-control',
-                ],
-            ])
-            ->add('dateCreation', DateTimeType::class, [
-                'label' => 'Date de création',
-                'widget' => 'single_text',
-                'data' => new \DateTime(),
-                'attr' => ['class' => 'form-control'],
-            ])
-            ->add('publie', CheckboxType::class, [
-                'label' => 'Publier immédiatement ?',
-                'required' => false,
-                'attr' => ['class' => 'form-check-input'],
-                'label_attr' => ['class' => 'form-check-label'],
-                'row_attr' => ['class' => 'form-check mb-3'],
-            ])
+            
             ->add('enregistrer', SubmitType::class, [
                 'label' => '💾 Enregistrer',
                 'attr' => ['class' => 'btn btn-primary w-100'],
             ])
+
             ->add('categorie', EntityType::class, [
                 'class' => Categorie::class,
                 'choice_label' => 'nom',
-                'label' => 'Catégorie',
-                'placeholder' => 'Sélectionnez une catégorie',
-                'required' => false,
-                'attr' => ['class' => 'form-control'],
+                'placeholder' => 'Choisir une catégorie',
             ])
+            ->add('titre', TextType::class, [
+                'attr' => ['placeholder' => 'Titre de l\'article'],
+            ])
+           
+            ->add('publie', CheckboxType::class, [
+                'label' => 'Publié',
+                'required' => false,
+            ])
+
             
+            ->add('contenu', TextareaType::class, [
+                'attr' => ['rows' => 5],
+            ])
+                ->add('auteur', TextType::class, [
+                    'attr' => ['placeholder' => 'Nom de l\'auteur'],
+                ])
+            
+           
         ;
     }
 
