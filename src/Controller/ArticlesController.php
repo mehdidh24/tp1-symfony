@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ArticleRepository;
 use App\Form\ArticleType;
 use Symfony\Component\HttpFoundation\Request;
-
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class ArticlesController extends AbstractController
 {
@@ -27,10 +27,12 @@ final class ArticlesController extends AbstractController
 
 
 #[Route('/articles/nouveau', name: 'app_article_nouveau')]
+#[IsGranted('ROLE_USER')]
 public function nouveau(Request $request, EntityManagerInterface $em): Response
 {
     $article = new Article();
     
+    $article->setAuteurUser($this->getUser());
     // Création du formulaire
     $form = $this->createForm(ArticleType::class, $article);
     
@@ -63,6 +65,10 @@ public function detail(Article $article): Response
 #[Route('/articles/{id}/modifier', name: 'app_article_modifier', requirements: ['id' => '\d+'])]
 public function modifier(Article $article, Request $request, EntityManagerInterface $em): Response
 {
+    // Vérification que l'utilisateur connecté est l'auteur de l'article ou un admin
+    if ($article->getAuteurUser() !== $this->getUser() && !in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+        throw $this->createAccessDeniedException('Vous n\'avez pas le droit de modifier cet article.');
+    }
     $form = $this->createForm(ArticleType::class, $article);
     $form->handleRequest($request);
 

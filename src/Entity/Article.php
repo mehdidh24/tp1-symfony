@@ -26,7 +26,7 @@ class Article
     #[ORM\Column(length: 255)]
      #[Assert\NotBlank(message: 'Le titre ne peut pas être vide.')]
     #[Assert\Length(
-        min: 5,
+        min: 1,
         max: 255,
         minMessage: 'Le titre doit contenir au moins {{ limit }} caractères.',
         maxMessage: 'Le titre ne peut pas dépasser {{ limit }} caractères.'
@@ -36,7 +36,7 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank(message: 'Le contenu ne peut pas être vide.')]
     #[Assert\Length(
-        min: 20,
+        min: 2,
         minMessage: 'Le contenu doit contenir au moins {{ limit }} caractères.'
     )]
     private ?string $contenu = null;
@@ -60,6 +60,9 @@ class Article
       #[ORM\ManyToOne(inversedBy: "articles")]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categorie $categorie = null;
+    #[ORM\ManyToOne(inversedBy: "articles")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $auteurUser = null;
     public function __construct()
     {
         $this->dateCreation = new \DateTime();
@@ -135,6 +138,16 @@ class Article
     public function setCategorie(?Categorie $categorie): static
     {
         $this->categorie = $categorie;
+
+         return $this;
+    }
+    public function getAuteurUser(): ?User
+    {
+        return $this->auteurUser;
+    }
+    public function setAuteurUser(?User $auteurUser): static
+    {
+        $this->auteurUser = $auteurUser;
 
          return $this;
     }
