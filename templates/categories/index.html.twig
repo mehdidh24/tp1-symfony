@@ -5,9 +5,11 @@
 {% block body %}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>📂 Catégories</h1>
+        {% if is_granted('ROLE_USER') %}
         <a href="{{ path('app_categorie_nouvelle') }}" class="btn btn-primary">
             ➕ Nouvelle catégorie
         </a>
+        {% endif %}
     </div>
 
     {% if categories is empty %}
